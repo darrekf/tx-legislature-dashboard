@@ -398,7 +398,7 @@ function updates() {
   const u = (ic, n, t) => `<div class="upd">${icon(ic, 22, 'o')}<div><b>${fmt(n)}</b> ${esc(t)}</div></div>`;
   $('#upds').innerHTML = u('plus', L.new, `new bills${D.new_range ? ` (${D.new_range})` : ''}`)
     + u('tag', D.subj_n, 'bills got official topics') + u('swap', L.swaps, 'Word versions now posted')
-    + u('doc', L.docs, 'new analyses or fiscal notes');
+    + u('doc', L.docs, 'new bill documents posted');
   const acts = new Set(D.bills.map(b => b.la.split(' - ').slice(1).join(' - ')));
   const filedOnly = [...acts].every(a => a === 'H Filed' || a === 'S Filed');
   $('#status').innerHTML = icon('flag', 16, 'm') + `<span>${filedOnly
