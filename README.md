@@ -1,6 +1,6 @@
 # Embedding the 90R Bill Tracker dashboard
 
-The dashboard is one self-contained web page. It's rebuilt each morning during the 2027 legislative session (through May 31, 2027) from Texas Legislature Online data and republished at the same address, so an embedded copy always shows the latest version. The host site doesn't need to change anything.
+The dashboard is one self-contained web page. It's rebuilt each evening during the 2027 legislative session (through May 31, 2027) from Texas Legislature Online data and republished at the same address, so an embedded copy always shows the latest version. The host site doesn't need to change anything.
 
 **Dashboard address:** https://darrekf.github.io/tx-legislature-dashboard/
 
