@@ -38,3 +38,7 @@ Add these to the end of the address:
 - **Sizing:** the layout adjusts from phone width up to 1,120 px wide.
 - **Accessibility:** the charts can be reached by keyboard and have text labels. Every number in them can also be found in the searchable bill table. A review against the university's accessibility standard is still recommended before launch.
 - **Branding:** the Bush School mark is the "dark background" version from the 2026 unit identity files, used without changes. The page also carries the City & County Governance Program mark.
+
+## Questions
+
+For questions, comments, or suggestions, [click here](mailto:dferrell@tamu.edu?subject=Feedback%3A%2090R%20Bill%20Tracker).
