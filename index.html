@@ -47,7 +47,21 @@ h1 { font-size:28px; margin:4px 0 9px; font-weight:700; letter-spacing:-.01em; }
 .seg-ctl { display:inline-flex; border:1px solid var(--grid); border-radius:8px; overflow:hidden; }
 .seg-ctl button { border:0; background:transparent; color:var(--ink); padding:7px 14px; font:inherit; cursor:pointer; }
 .seg-ctl button + button { border-left:1px solid var(--grid); }
-.seg-ctl button[aria-pressed="true"] { background:var(--blue); color:#fff; }
+.seg-ctl button[aria-pressed="true"], .seg-ctl button[aria-selected="true"] { background:var(--blue); color:#fff; }
+.grp { display:inline-flex; align-items:center; gap:10px; }
+.bar-top { gap:12px 28px; }
+.bar-top .lbl { font-size:15px; font-weight:700; color:var(--ink); }
+.fulllink { margin-left:auto; font-size:13px; font-weight:600; color:var(--blue); text-decoration:none; }
+.fulllink:hover { text-decoration:underline; }
+.panel[hidden] { display:none !important; }
+#p-session > .card:first-child, #p-find > .card:first-child { margin-top:16px; }
+@media (max-width: 600px) {
+  .bar-top .grp { width:100%; flex-wrap:wrap; gap:6px; }
+  .bar-top .lbl { width:100%; }
+  #views { width:100%; }
+  #views button { flex:1; padding:8px 4px; font-size:13px; white-space:nowrap; }
+  .fulllink { margin-left:0; }
+}
 .lbl { font-size:12.5px; color:var(--ink2); }
 .hint { font-size:12.5px; color:var(--muted); }
 
@@ -211,8 +225,9 @@ button:focus-visible, input:focus-visible, a:focus-visible, circle:focus-visible
     <h2 id="h-howto">How to use this tracker</h2>
     <p>Use any of these, in any order, to find the bills of interest to you.</p>
     <ul>
-      <li><b>Chamber</b> - Pick House or Senate. Every number, chart and list updates.</li>
-      <li><b>Charts</b> - Click or tap a bar or ring slice to list those bills under Find a bill.</li>
+      <li><b>Filter by Chamber</b> - Pick House or Senate. Every number, chart and list updates.</li>
+      <li><b>Select What to Show</b> - All shows the whole tracker. Overview, Session or Find a bill shows just that part.</li>
+      <li><b>Charts</b> - Click or tap a bar or ring slice to list those bills under Find a bill. The page switches there for you.</li>
       <li><b>Search</b> - Type a bill number, author or keyword. It works with any filter.</li>
       <li><b>Word cloud</b> - Select a word to list only bills whose captions use it. The cloud follows every filter and search.</li>
       <li><b>Clear</b> - Select the same bar again, or the &times; on the filter tag.</li>
@@ -220,12 +235,18 @@ button:focus-visible, input:focus-visible, a:focus-visible, circle:focus-visible
   </section>
 
   <div class="bar-top">
-    <span class="lbl" id="ch-lbl">Chamber</span>
+    <span class="grp"><span class="lbl" id="ch-lbl">Filter by Chamber</span>
     <div class="seg-ctl" role="group" aria-labelledby="ch-lbl" id="chamber">
       <button aria-pressed="true" data-v="All">All</button><button aria-pressed="false" data-v="House">House</button><button aria-pressed="false" data-v="Senate">Senate</button>
-    </div>
+    </div></span>
+    <span class="grp" id="grp-view"><span class="lbl" id="view-lbl">Select What to Show</span>
+    <div class="seg-ctl" role="tablist" aria-labelledby="view-lbl" id="views">
+      <button role="tab" id="t-all" data-view="all">All</button><button role="tab" id="t-overview" data-view="overview" aria-controls="p-overview">Overview</button><button role="tab" id="t-session" data-view="session" aria-controls="p-session">Session</button><button role="tab" id="t-find" data-view="find" aria-controls="p-find">Find a bill</button>
+    </div></span>
+    <a class="fulllink" id="fulllink" href="https://darrekf.github.io/tx-legislature-dashboard/" target="_blank" rel="noopener" hidden>Open the full tracker in a new tab &#8599;</a>
   </div>
 
+  <div class="panel" id="p-overview" role="tabpanel" aria-labelledby="t-overview">
   <section class="kpis" id="kpis" aria-label="Key numbers"></section>
 
   <div class="grid2">
@@ -256,7 +277,9 @@ button:focus-visible, input:focus-visible, a:focus-visible, circle:focus-visible
         <span><span class="sw" style="background:var(--neutral)"></span>Other bills</span></div>
     </section>
   </div>
+  </div>
 
+  <div class="panel" id="p-session" role="tabpanel" aria-labelledby="t-session">
   <section class="card full">
     <h2 id="h-tl"></h2>
     <div class="tl" id="tl"></div>
@@ -269,7 +292,9 @@ button:focus-visible, input:focus-visible, a:focus-visible, circle:focus-visible
     <div class="upds" id="upds"></div>
     <div class="status" id="status"></div>
   </section>
+  </div>
 
+  <div class="panel" id="p-find" role="tabpanel" aria-labelledby="t-find">
   <section class="card full">
     <h2 id="h-tbl"></h2>
     <div class="tools">
@@ -288,6 +313,7 @@ button:focus-visible, input:focus-visible, a:focus-visible, circle:focus-visible
     </table></div>
     <button class="more" id="more" hidden></button>
   </section>
+  </div>
 
   <section class="disclaimer" role="note" aria-label="Use as a resource">
     <h2>Use this tracker as a resource, not the final word</h2>
@@ -522,9 +548,34 @@ $('#chamber').addEventListener('click', e => {
   $('#chamber').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
   render();
 });
+// section buttons: All / Overview / Session / Find a bill. All is the default; ?view=all|overview|session|find sets the first one.
+const VIEWS = ['all', 'overview', 'session', 'find'];
+function setView(v) {
+  if (!VIEWS.includes(v)) v = 'all';
+  document.querySelectorAll('#views [role="tab"]').forEach(b => {
+    const on = b.dataset.view === v;
+    b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1;
+  });
+  ['overview', 'session', 'find'].forEach(x => { $('#p-' + x).hidden = !(v === 'all' || v === x); });
+  postHeight();
+}
+$('#views').addEventListener('click', e => { const b = e.target.closest('[data-view]'); if (b) setView(b.dataset.view); });
+$('#views').addEventListener('keydown', e => {
+  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+  const tabs = [...document.querySelectorAll('#views [role="tab"]')];
+  let i = tabs.indexOf(document.activeElement);
+  i = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+  e.preventDefault(); tabs[i].focus(); setView(tabs[i].dataset.view);
+});
+setView(P.get('view') || 'all');
+if (EMBEDDED) $('#fulllink').hidden = false;
+
 const pick = el => {
   setF({ kind: el.dataset.kind, key: el.dataset.key, label: el.dataset.label });
-  if (S.f) $('#h-tbl').closest('section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (S.f) {
+    if (!['find', 'all'].includes($('#views [aria-selected="true"]').dataset.view)) setView('find');
+    $('#h-tbl').closest('section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 };
 document.addEventListener('click', e => {
   const wd = e.target.closest('[data-w]');
