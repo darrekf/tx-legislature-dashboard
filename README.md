@@ -49,7 +49,7 @@ Approximate heights, with 10 bills listed:
 
 Add these to the end of the address:
 
-- **`?theme=light`** - always uses the light color scheme. Without it, the page follows each reader's light or dark setting.
+- **`?theme=light`** - no longer has any effect. Since November 18, 2026, the page always uses its dark color scheme so the frame stands out from the host page. Existing embeds that include it keep working.
 - **`?header=0`** - hides the navy title band, including the logos, when the host page already has its own title.
 - **`?view=overview`**, **`?view=session`** or **`?view=find`** - opens on that section instead of All, the default.
 - **Combined** - join options with `&`, for example `?theme=light&header=0&view=find`
