@@ -11,7 +11,7 @@ Paste this where the dashboard should appear. The script lets the frame grow and
 ```html
 <iframe id="tx90r-dashboard" src="https://darrekf.github.io/tx-legislature-dashboard/?theme=light"
         title="90R Bill Tracker: Texas Legislature, 90th Regular Session"
-        style="width:100%; height:3200px; border:0;" loading="lazy"></iframe>
+        style="width:100%; height:4300px; border:0;" loading="lazy"></iframe>
 <script>
   window.addEventListener('message', function (e) {
     if (e.origin === 'https://darrekf.github.io' && e.data && e.data.type === 'tx90r-dashboard-height') {
@@ -30,20 +30,18 @@ Use the iframe alone, with a fixed height, and make sure the frame can scroll. D
 ```html
 <iframe src="https://darrekf.github.io/tx-legislature-dashboard/?theme=light"
         title="90R Bill Tracker: Texas Legislature, 90th Regular Session"
-        style="width:100%; height:3700px; border:0;"></iframe>
+        style="width:100%; height:4300px; border:0;"></iframe>
 ```
 
-The dashboard opens with **All** sections showing. At desktop widths, 3,700 px fits the whole dashboard with 10 bills listed. Readers can use the **Select What to Show** buttons (All, Overview, Session, Find a bill) to see one part at a time. Longer bill lists and phone screens scroll inside the frame. When the dashboard is embedded, it also shows an **Open the full tracker in a new tab** link next to those buttons, so readers can always reach the whole page.
+Since November 26, 2026, the dashboard is one page: a "New this week" box, "Where the bills stand," a **Choose Local Government Types** list and the bill table, which shows 25 bills per page. At desktop widths, 4,300 px fits the whole page. Readers can pick 10, 25, 50 or 100 bills per page, and longer lists and phone screens scroll inside the frame. When the dashboard is embedded, it also shows an **Open the full tracker in a new tab** link at the top, so readers can always reach the whole page.
 
-For a shorter frame, open on a single section by adding `&view=overview` to the address and setting the height to 2,700 px. That fits any single section at desktop widths.
+Approximate heights, with 25 bills per page:
 
-Approximate heights, with 10 bills listed:
-
-| Frame width | All | Overview | Session | Find a bill |
-|---|---|---|---|---|
-| 1,100-1,300 px | 3,570-3,640 px | 1,470 px | 1,140 px | 2,520-2,590 px |
-| 900 px | 4,440 px | 1,590 px | 1,220 px | 3,360 px |
-| Phone (about 400 px) | 6,820 px | 2,770 px | 1,990 px | 4,770 px |
+| Frame width | Height |
+|---|---|
+| 1,100-1,200 px | 4,270-4,290 px |
+| 900 px | 4,930 px |
+| Phone (about 400 px) | 6,460 px |
 
 ## Options
 
@@ -51,15 +49,16 @@ Add these to the end of the address:
 
 - **`?theme=light`** - no longer has any effect. Since November 18, 2026, the page always uses its dark color scheme so the frame stands out from the host page. Existing embeds that include it keep working.
 - **`?header=0`** - hides the navy title band, including the logos, when the host page already has its own title.
-- **`?view=overview`**, **`?view=session`** or **`?view=find`** - opens on that section instead of All, the default.
-- **Combined** - join options with `&`, for example `?theme=light&header=0&view=find`
+- **`?view=`** - no longer has any effect. Since November 26, 2026, the dashboard has a single view. Existing embeds that include it keep working.
+- **Combined** - join options with `&`, for example `?theme=light&header=0`
+- **Links to one type** - add a type name after `#` to open the list on it, for example `#county`, `#school-district` or `#county--city`. Use `#any-local-government` for every bill marked as affecting local government.
 
 ## Notes for the web team
 
-- **No outside requests:** the page loads no outside scripts, fonts, cookies or trackers. The data, icons and logos are all built into the file.
+- **No outside requests:** the page loads no outside scripts, fonts, cookies or trackers. The data, icons, logos and the code for the table (Tabulator, MIT license) and the search (Fuse.js, Apache 2.0 license) are all built into the file.
 - **Links:** each bill number opens its Texas Legislature Online history page in a new tab.
 - **Sizing:** the layout adjusts from phone width up to 1,120 px wide.
-- **Accessibility:** the charts can be reached by keyboard and have text labels. Every number in them can also be found in the searchable bill table. A review against the university's accessibility standard is still recommended before launch.
+- **Accessibility:** the local government type list, search box, chamber buttons and sort menu can all be reached by keyboard and have text labels. A review against the university's accessibility standard is still recommended.
 - **Branding:** the Bush School mark is the "dark background" version from the 2026 unit identity files, used without changes. The page also carries the City & County Governance Program mark.
 
 ## Questions
